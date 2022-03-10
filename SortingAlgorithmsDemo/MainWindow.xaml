@@ -65,6 +65,13 @@
                     Style="{StaticResource baseTextBlock}"
                     Text="Colors:"/>
                 <RadioButton
+                    IsChecked="{Binding Path=SelectedColorScheme, Converter={StaticResource colorSchemesConverter}, ConverterParameter={x:Static local:ColorSchemes.Solid}}"
+                    GroupName="color">
+                    <TextBlock
+                        Style="{StaticResource baseTextBlock}"
+                        Text="Solid"/>
+                </RadioButton>
+                <RadioButton
                     IsChecked="{Binding Path=SelectedColorScheme, Converter={StaticResource colorSchemesConverter}, ConverterParameter={x:Static local:ColorSchemes.Random}}"
                     GroupName="color">
                     <TextBlock

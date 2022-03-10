@@ -29,17 +29,22 @@ namespace SortingAlgorithmsDemo
         private const int _height = 600;
         private readonly DispatcherTimer _timer;
         private readonly List<SortingUnit> _units;
+        private readonly List<SortingUnit> _unitsCopy;
         private readonly List<SortingExchange> _exchanges;
         private int _currentExchange;
         private ColorSchemes _colorScheme;
+        private Color _solidColor;
 
         public MainWindowViewModel()
         {
+            _solidColor = Color.DarkBlue;
+
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 0);
             _timer.Tick += TimerTick;
 
             _units = new List<SortingUnit>();
+            _unitsCopy = new List<SortingUnit>();
             _exchanges = new List<SortingExchange>();
             _currentExchange = 0;
 
@@ -63,7 +68,7 @@ namespace SortingAlgorithmsDemo
             _bitmap = new DirectBitmap(_width, _height);
 
             IsRunning = false;
-            Amount = "30";
+            Amount = "100";
 
             MakeUnits();
             Render();
@@ -158,28 +163,48 @@ namespace SortingAlgorithmsDemo
         private void MakeFewUniqueUnits()
         {
             var randomValues = new List<int>();
-            for (int i = 0; i < Utils.Next(3, 30); i++)
+            for (int i = 0; i < Utils.Next(3, 20); i++)
             {
                 randomValues.Add(Utils.Next(0, _height));
             }
+            randomValues.Sort();
+
+            var eachTypeAmount = _amount / randomValues.Count;
+            var additionalUnits = _amount % randomValues.Count;
+            var type = 0;
 
             _units.Clear();
+
             for (int i = 0; i < _amount; i++)
             {
-                var color = Utils.GetRandomColor();
-                var value = randomValues[Utils.Next(0, randomValues.Count)];
+                if (type == randomValues.Count)
+                {
+                    for (int k = 0; k < additionalUnits; k++)
+                    {
+                        var color = Utils.GetRandomColor();
+                        var value = randomValues[type - 1];
 
-                _units.Add(new SortingUnit(value, color));
-            }
+                        var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * _units.Count);
+                        var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
 
-            _units.BubbleSortAscending(InnerSwap);
+                        _units.Add(new SortingUnit(value, color, grayGradientColor));
+                    }
 
-            for (int i = 0; i < _units.Count; i++)
-            {
-                var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * i);
-                var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
+                    break;
+                }
 
-                _units[i].SetGraduatedGrayColor(grayGradientColor);
+                for (int j = 0; j < eachTypeAmount; j++)
+                {
+                    var color = Utils.GetRandomColor();
+                    var value = randomValues[type];
+
+                    var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * _units.Count);
+                    var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
+    
+                    _units.Add(new SortingUnit(value, color, grayGradientColor));
+                }
+
+                type += 1;
             }
         }
 
@@ -193,10 +218,13 @@ namespace SortingAlgorithmsDemo
             _exchanges.Clear();
             _currentExchange = 0;
 
+            _unitsCopy.Clear();
+            _unitsCopy.AddRange(_units);
+
             switch (SelectedSortingAlgorithm)
             {
                 case SortingAlgorithms.Bubble:
-                    _units.BubbleSortAscending(Swap);
+                    _unitsCopy.BubbleSortAscending(Swap);
                     break;
                 case SortingAlgorithms.Insertion:
                     break;
@@ -218,6 +246,10 @@ namespace SortingAlgorithmsDemo
             _timer.Stop();
 
             //отобразить конечное значение послед-ти
+            _units.Clear();
+            _units.AddRange(_unitsCopy);
+
+            Render();
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -245,10 +277,16 @@ namespace SortingAlgorithmsDemo
 
             switch (SelectedColorScheme)
             {
+                case ColorSchemes.Solid:
+                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, _solidColor);
+                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, _solidColor);
+                    break;
+
                 case ColorSchemes.Random:
                     _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.Color);
                     _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.Color);
                     break;
+
                 case ColorSchemes.GraduatedGray:
                     _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.GraduatedGrayColor);
                     _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.GraduatedGrayColor);
@@ -269,9 +307,9 @@ namespace SortingAlgorithmsDemo
 
         private void Swap(int i, int j)
         {
-            /*var t = _units[i];
-            _units[i] = _units[j];
-            _units[j] = t;*/
+            var t = _unitsCopy[i];
+            _unitsCopy[i] = _unitsCopy[j];
+            _unitsCopy[j] = t;
 
             _exchanges.Add(new SortingExchange(i, j));
         }
@@ -363,9 +401,14 @@ namespace SortingAlgorithmsDemo
 
                 switch (SelectedColorScheme)
                 {
+                    case ColorSchemes.Solid:
+                        _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _solidColor);
+                        break;
+
                     case ColorSchemes.Random:
                         _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _units[i].Color);
                         break;
+
                     case ColorSchemes.GraduatedGray:
                         _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _units[i].GraduatedGrayColor);
                         break;

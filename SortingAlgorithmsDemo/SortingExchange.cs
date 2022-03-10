@@ -1,6 +1,6 @@
 ﻿namespace SortingAlgorithmsDemo
 {
-    public class SortingExchange
+    public struct SortingExchange
     {
         public SortingExchange(int firstIndex, int secondIndex)
         {

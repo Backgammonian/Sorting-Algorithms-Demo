@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SortingAlgorithmsDemo.Algorithms
 {
-    public static class BubbleSorter
+    public static class BubbleSort
     {
         public static void BubbleSortAscending(this List<SortingUnit> collection, Action<int, int> swapFunction)
         {
