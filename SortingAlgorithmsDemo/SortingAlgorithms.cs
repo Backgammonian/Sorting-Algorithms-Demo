@@ -17,6 +17,7 @@
         Comb,
         OddEven,
         Tree,
-        Heap
+        Heap,
+        Cycle
     }
 }

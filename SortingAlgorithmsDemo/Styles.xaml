@@ -3,6 +3,7 @@
                     xmlns:local="clr-namespace:SortingAlgorithmsDemo">
 
     <local:ColorSchemesConverter x:Key="colorSchemesConverter" />
+    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
 
     <Style x:Key="imageStyle" TargetType="Image">
         <Setter Property="Margin" Value="2"/>

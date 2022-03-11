@@ -4,7 +4,6 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -36,6 +35,8 @@ namespace SortingAlgorithmsDemo
         private int _currentPlacement;
         private ColorSchemes _colorScheme;
         private Color _solidColor;
+        private bool _hasMessage;
+        private string _message;
 
         public MainWindowViewModel()
         {
@@ -80,6 +81,7 @@ namespace SortingAlgorithmsDemo
                 SortingAlgorithms.OddEven,
                 SortingAlgorithms.Tree,
                 SortingAlgorithms.Heap,
+                SortingAlgorithms.Cycle
             };
 
             _bitmap = new DirectBitmap(_width, _height);
@@ -155,6 +157,18 @@ namespace SortingAlgorithmsDemo
                     OnPropertyChanged(nameof(CurrentAmount));
                 }
             }
+        }
+
+        public bool HasMessage
+        {
+            get => _hasMessage;
+            private set => SetProperty(ref _hasMessage, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            private set => SetProperty(ref _message, value);
         }
 
         private void ApplyNewAmount()
@@ -305,6 +319,10 @@ namespace SortingAlgorithmsDemo
                 case SortingAlgorithms.Heap:
                     _unitsCopy.HeapSort(SwapFunction);
                     break;
+
+                case SortingAlgorithms.Cycle:
+                    _unitsCopy.CycleSort(PlacementFunction);
+                    break;
             }
 
             _timer.Start();
@@ -332,86 +350,97 @@ namespace SortingAlgorithmsDemo
                 SortingAlgorithms.Merge or
                 SortingAlgorithms.Counting or
                 SortingAlgorithms.Radix or
-                SortingAlgorithms.Tree)
+                SortingAlgorithms.Tree or
+                SortingAlgorithms.Cycle)
             {
-                if (_currentPlacement == _placements.Count)
-                {
-                    Stop();
-
-                    return;
-                }
-
-                var position = _placements[_currentPlacement].Position;
-                var value = _placements[_currentPlacement].Value;
-                _units[position] = value;
-
-                var unit = _units[position];
-                var x = Convert.ToInt32(_xStep * position);
-
-                _bitmap.FillRectangle(x, 0, (int)_xStep, _height, Color.White);
-
-                switch (SelectedColorScheme)
-                {
-                    case ColorSchemes.Solid:
-                        _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, _solidColor);
-                        break;
-
-                    case ColorSchemes.Random:
-                        _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.Color);
-                        break;
-
-                    case ColorSchemes.GraduatedGray:
-                        _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.GraduatedGrayColor);
-                        break;
-                }
-
-                _currentPlacement += 1;
+                DrawPlacements();
             }
             else
             {
-                if (_currentExchange == _exchanges.Count)
-                {
-                    Stop();
-
-                    return;
-                }
-
-                var position1 = _exchanges[_currentExchange].FirstIndex;
-                var position2 = _exchanges[_currentExchange].SecondIndex;
-
-                InnerSwap(position1, position2);
-
-                var unit1 = _units[position1];
-                var unit2 = _units[position2];
-
-                var x1 = Convert.ToInt32(_xStep * position1);
-                var x2 = Convert.ToInt32(_xStep * position2);
-
-                _bitmap.FillRectangle(x1, 0, (int)_xStep, _height, Color.White);
-                _bitmap.FillRectangle(x2, 0, (int)_xStep, _height, Color.White);
-
-                switch (SelectedColorScheme)
-                {
-                    case ColorSchemes.Solid:
-                        _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, _solidColor);
-                        _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, _solidColor);
-                        break;
-
-                    case ColorSchemes.Random:
-                        _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.Color);
-                        _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.Color);
-                        break;
-
-                    case ColorSchemes.GraduatedGray:
-                        _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.GraduatedGrayColor);
-                        _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.GraduatedGrayColor);
-                        break;
-                }
-
-                _currentExchange += 1;
+                DrawSwaps();
             }
 
             UpdateCanvas();
+        }
+
+        private void DrawPlacements()
+        {
+            if (_currentPlacement == _placements.Count)
+            {
+                Stop();
+
+                return;
+            }
+
+            var position = _placements[_currentPlacement].Position;
+            var value = _placements[_currentPlacement].Value;
+            _units[position] = value;
+
+            var unit = _units[position];
+            var x = Convert.ToInt32(_xStep * position);
+
+            _bitmap.FillRectangle(x, 0, (int)_xStep, _height, Color.White);
+
+            switch (SelectedColorScheme)
+            {
+                case ColorSchemes.Solid:
+                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, _solidColor);
+                    break;
+
+                case ColorSchemes.Random:
+                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.Color);
+                    break;
+
+                case ColorSchemes.GraduatedGray:
+                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.GraduatedGrayColor);
+                    break;
+            }
+
+            _currentPlacement += 1;
+        }
+
+        private void DrawSwaps()
+        {
+            if (_currentExchange == _exchanges.Count)
+            {
+                Stop();
+
+                return;
+            }
+
+            var position1 = _exchanges[_currentExchange].FirstIndex;
+            var position2 = _exchanges[_currentExchange].SecondIndex;
+
+            InnerSwap(position1, position2);
+
+            var unit1 = _units[position1];
+            var unit2 = _units[position2];
+
+            var x1 = Convert.ToInt32(_xStep * position1);
+            var x2 = Convert.ToInt32(_xStep * position2);
+
+            _bitmap.FillRectangle(x1, 0, (int)_xStep, _height, Color.White);
+            _bitmap.FillRectangle(x2, 0, (int)_xStep, _height, Color.White);
+
+            switch (SelectedColorScheme)
+            {
+                case ColorSchemes.Solid:
+                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, _solidColor);
+                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, _solidColor);
+                    break;
+
+                case ColorSchemes.Random:
+                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.Color);
+                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.Color);
+                    break;
+
+                case ColorSchemes.GraduatedGray:
+                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.GraduatedGrayColor);
+                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.GraduatedGrayColor);
+                    break;
+            }
+
+            _currentExchange += 1;
         }
 
         private void InnerSwap(int i, int j)
@@ -488,10 +517,12 @@ namespace SortingAlgorithmsDemo
 
         private void ShowInfo()
         {
+            HasMessage = true;
+
             switch (SelectedSortingAlgorithm)
             {
                 case SortingAlgorithms.Bubble:
-                    MessageBox.Show(Properties.Resources.BubbleSortInfo, "Sorting algorithm info: " + SelectedSortingAlgorithm, MessageBoxButton.OK, MessageBoxImage.Information);
+                    Message = Properties.Resources.BubbleSortInfo;
                     break;
                 case SortingAlgorithms.Insertion:
                     break;
