@@ -74,6 +74,12 @@ namespace SortingAlgorithmsDemo
                 SortingAlgorithms.Stooge,
                 SortingAlgorithms.Pancake,
                 SortingAlgorithms.Gnome,
+                SortingAlgorithms.Counting,
+                SortingAlgorithms.Radix,
+                SortingAlgorithms.Comb,
+                SortingAlgorithms.OddEven,
+                SortingAlgorithms.Tree,
+                SortingAlgorithms.Heap,
             };
 
             _bitmap = new DirectBitmap(_width, _height);
@@ -237,11 +243,11 @@ namespace SortingAlgorithmsDemo
             switch (SelectedSortingAlgorithm)
             {
                 case SortingAlgorithms.Bubble:
-                    _unitsCopy.BubbleSortAscending(Swap);
+                    _unitsCopy.BubbleSortAscending(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Insertion:
-                    _unitsCopy.InsertionSort(Swap);
+                    _unitsCopy.InsertionSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Merge:
@@ -249,31 +255,55 @@ namespace SortingAlgorithmsDemo
                     break;
 
                 case SortingAlgorithms.Selection:
-                    _unitsCopy.SelectionSort(Swap);
+                    _unitsCopy.SelectionSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Shaker:
-                    _unitsCopy.ShakerSort(Swap);
+                    _unitsCopy.ShakerSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Shell:
-                    _unitsCopy.ShellSort(Swap);
+                    _unitsCopy.ShellSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Quick:
-                    _unitsCopy.QuickSort(Swap);
+                    _unitsCopy.QuickSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Stooge:
-                    _unitsCopy.StoogeSort(Swap);
+                    _unitsCopy.StoogeSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Pancake:
-                    _unitsCopy.PancakeSort(Swap);
+                    _unitsCopy.PancakeSort(SwapFunction);
                     break;
 
                 case SortingAlgorithms.Gnome:
-                    _unitsCopy.GnomeSort(Swap);
+                    _unitsCopy.GnomeSort(SwapFunction);
+                    break;
+
+                case SortingAlgorithms.Counting:
+                    _unitsCopy.CountingSort(PlacementFunction);
+                    break;
+
+                case SortingAlgorithms.Radix:
+                    _unitsCopy.RadixSort(PlacementFunction);
+                    break;
+
+                case SortingAlgorithms.Comb:
+                    _unitsCopy.CombSort(SwapFunction);
+                    break;
+
+                case SortingAlgorithms.OddEven:
+                    _unitsCopy.OddEvenSort(SwapFunction);
+                    break;
+
+                case SortingAlgorithms.Tree:
+                    _unitsCopy.TreeSort(PlacementFunction);
+                    break;
+
+                case SortingAlgorithms.Heap:
+                    _unitsCopy.HeapSort(SwapFunction);
                     break;
             }
 
@@ -298,7 +328,11 @@ namespace SortingAlgorithmsDemo
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (SelectedSortingAlgorithm == SortingAlgorithms.Merge)
+            if (SelectedSortingAlgorithm is
+                SortingAlgorithms.Merge or
+                SortingAlgorithms.Counting or
+                SortingAlgorithms.Radix or
+                SortingAlgorithms.Tree)
             {
                 if (_currentPlacement == _placements.Count)
                 {
@@ -387,7 +421,7 @@ namespace SortingAlgorithmsDemo
             _units[j] = t;
         }
 
-        private void Swap(int i, int j)
+        private void SwapFunction(int i, int j)
         {
             var t = _unitsCopy[i];
             _unitsCopy[i] = _unitsCopy[j];

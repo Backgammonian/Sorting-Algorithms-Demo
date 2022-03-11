@@ -11,6 +11,12 @@
         Quick,
         Stooge,
         Pancake,
-        Gnome
+        Gnome,
+        Counting,
+        Radix,
+        Comb,
+        OddEven,
+        Tree,
+        Heap
     }
 }

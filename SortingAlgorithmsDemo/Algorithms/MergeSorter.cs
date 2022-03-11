@@ -42,8 +42,6 @@ namespace SortingAlgorithmsDemo.Algorithms
 
             for (int i = 0; i < tempArray.Length; i++)
             {
-                collection[lowIndex + i] = tempArray[i];
-
                 placementFunction(lowIndex + i, tempArray[i]);
             }
         }
