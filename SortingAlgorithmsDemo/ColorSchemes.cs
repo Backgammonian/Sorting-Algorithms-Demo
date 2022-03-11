@@ -6,11 +6,4 @@
         Solid,
         GraduatedGray
     }
-
-    public enum SortingAlgorithms
-    {
-        Bubble,
-        Insertion,
-        Merge
-    }
 }
