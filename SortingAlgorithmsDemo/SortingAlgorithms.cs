@@ -18,6 +18,7 @@
         OddEven,
         Tree,
         Heap,
-        Cycle
+        Cycle,
+        Bitonic
     }
 }

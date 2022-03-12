@@ -61,6 +61,20 @@ namespace SortingAlgorithmsDemo.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(log^2(n)) parallel time
+        ///Average time: O(log^2(n)) parallel time
+        ///Worst time: O(log^2(n)) parallel time
+        ///Memory usage: O(n*log^2(n))
+        ///Stable: No
+        ///Method: Parallel (sorting network).
+        /// </summary>
+        public static string BitonicSortInfo {
+            get {
+                return ResourceManager.GetString("BitonicSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Best time: O(n)
         ///Average time: O(n^2)
         ///Worst time: O(n^2)
@@ -71,6 +85,230 @@ namespace SortingAlgorithmsDemo.Properties {
         public static string BubbleSortInfo {
             get {
                 return ResourceManager.GetString("BubbleSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: No
+        ///Method: Exchanging.
+        /// </summary>
+        public static string CombSortInfo {
+            get {
+                return ResourceManager.GetString("CombSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n)
+        ///Worst time: O(n)
+        ///Memory usage: O(n+b), where b is the range of input
+        ///Stable: Yes
+        ///Method: Counting.
+        /// </summary>
+        public static string CountingSortInfo {
+            get {
+                return ResourceManager.GetString("CountingSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n^2)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(n)
+        ///Stable: No
+        ///Method: Selection.
+        /// </summary>
+        public static string CycleSortInfo {
+            get {
+                return ResourceManager.GetString("CycleSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: Yes
+        ///Method: Exchanging.
+        /// </summary>
+        public static string GnomeSortInfo {
+            get {
+                return ResourceManager.GetString("GnomeSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n*log(n))
+        ///Worst time: O(n*log(n))
+        ///Memory usage: O(1)
+        ///Stable: No
+        ///Method: Selection.
+        /// </summary>
+        public static string HeapSortInfo {
+            get {
+                return ResourceManager.GetString("HeapSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: Yes
+        ///Method: Insertion.
+        /// </summary>
+        public static string InsertionSortInfo {
+            get {
+                return ResourceManager.GetString("InsertionSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n*log(n))
+        ///Worst time: O(n*log(n))
+        ///Memory usage: O(n)
+        ///Stable: Yes
+        ///Method: Merging.
+        /// </summary>
+        public static string MergeSortInfo {
+            get {
+                return ResourceManager.GetString("MergeSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: Yes
+        ///Method: Exchanging.
+        /// </summary>
+        public static string OddEvenSortInfo {
+            get {
+                return ResourceManager.GetString("OddEvenSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(n)
+        ///Stable: No
+        ///Method: Exchanging.
+        /// </summary>
+        public static string PancakeSortInfo {
+            get {
+                return ResourceManager.GetString("PancakeSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n*log(n))
+        ///Worst time: O(n^2)
+        ///Memory usage: O(n*log(n))
+        ///Stable: No
+        ///Method: Partitioning.
+        /// </summary>
+        public static string QuickSortInfo {
+            get {
+                return ResourceManager.GetString("QuickSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n)
+        ///Worst time: O(n)
+        ///Memory usage: O(n+b), where b is the range of input
+        ///Stable: Yes
+        ///Method: Counting.
+        /// </summary>
+        public static string RadixSortInfo {
+            get {
+                return ResourceManager.GetString("RadixSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n^2)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: No
+        ///Method: Selection.
+        /// </summary>
+        public static string SelectionSortInfo {
+            get {
+                return ResourceManager.GetString("SelectionSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n)
+        ///Average time: O(n^2)
+        ///Worst time: O(n^2)
+        ///Memory usage: O(1)
+        ///Stable: Yes
+        ///Method: Exchanging.
+        /// </summary>
+        public static string ShakerSortInfo {
+            get {
+                return ResourceManager.GetString("ShakerSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n^(4/3))
+        ///Worst time: O(n^(3/2))
+        ///Memory usage: O(1)
+        ///Stable: No
+        ///Method: Insertion.
+        /// </summary>
+        public static string ShellSortInfo {
+            get {
+                return ResourceManager.GetString("ShellSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n^(log(3) / log(1.5))) = O(n^(2.7095...))
+        ///Average time: O(n^(log(3) / log(1.5))) = O(n^(2.7095...))
+        ///Worst time: O(n^(log(3) / log(1.5))) = O(n^(2.7095...))
+        ///Memory usage: O(n)
+        ///Stable: No
+        ///Method: Exchanging.
+        /// </summary>
+        public static string StoogeSortInfo {
+            get {
+                return ResourceManager.GetString("StoogeSortInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Best time: O(n*log(n))
+        ///Average time: O(n*log(n))
+        ///Worst time: O(n*log(n)), when using a self-balancing binary search tree
+        ///Memory usage: O(n)
+        ///Stable: Yes
+        ///Method: Insertion.
+        /// </summary>
+        public static string TreeSortInfo {
+            get {
+                return ResourceManager.GetString("TreeSortInfo", resourceCulture);
             }
         }
     }

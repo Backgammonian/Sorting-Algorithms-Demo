@@ -19,7 +19,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="135"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Border
@@ -29,7 +28,7 @@
                 Source="{Binding Canvas}"
                 Style="{StaticResource imageStyle}"/>
         </Border>
-        
+
         <StackPanel
             Style="{StaticResource baseStackPanel}"
             Grid.Row="1"
@@ -146,6 +145,13 @@
                     Style="{StaticResource comboBoxStyle}"
                     ItemsSource="{Binding SortingAlgorithmsList}"
                     SelectedItem="{Binding SelectedSortingAlgorithm}">
+                    <ComboBox.ToolTip>
+                        <StackPanel>
+                            <TextBlock 
+                                Style="{StaticResource baseTextBlock}"
+                                Text="{Binding Message}"/>
+                        </StackPanel>
+                    </ComboBox.ToolTip>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -154,14 +160,6 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button
-                    Style="{StaticResource baseButton}"
-                    Margin="2, 14, 2, 2"
-                    Command="{Binding ShowSortingAlgorithmInfoCommand}">
-                    <TextBlock
-                        Style="{StaticResource baseTextBlock}"
-                        Text="Show info"/>
-                </Button>
             </StackPanel>
             <Rectangle 
                 Style="{StaticResource verticalSeparator}"/>
@@ -184,15 +182,6 @@
                         Text="End algorithm"/>
                 </Button>
             </StackPanel>
-        </StackPanel>
-
-        <StackPanel
-            Grid.Row="2"
-            Style="{StaticResource baseStackPanel}"
-            Orientation="Horizontal">
-            <TextBlock
-                Visibility="{Binding HasMessage, Converter={StaticResource booleanToVisibilityConverter}}"
-                Text="{Binding Message}"/>
         </StackPanel>
     </Grid>
 </Window>

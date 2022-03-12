@@ -35,7 +35,7 @@ namespace SortingAlgorithmsDemo
         private int _currentPlacement;
         private ColorSchemes _colorScheme;
         private Color _solidColor;
-        private bool _hasMessage;
+        private SortingAlgorithms _sortingAlgorithm;
         private string _message;
 
         public MainWindowViewModel()
@@ -61,7 +61,6 @@ namespace SortingAlgorithmsDemo
             AllUniqueCommand = new RelayCommand(MakeAllUnique);
             FewUniqueCommand = new RelayCommand(MakeFewUnique);
             PartiallyOrderedCommand = new RelayCommand(MakePartiallyOrdered);
-            ShowSortingAlgorithmInfoCommand = new RelayCommand(ShowInfo);
 
             SortingAlgorithmsList = new ObservableCollection<SortingAlgorithms>
             {
@@ -81,13 +80,15 @@ namespace SortingAlgorithmsDemo
                 SortingAlgorithms.OddEven,
                 SortingAlgorithms.Tree,
                 SortingAlgorithms.Heap,
-                SortingAlgorithms.Cycle
+                SortingAlgorithms.Cycle,
+                SortingAlgorithms.Bitonic
             };
 
             _bitmap = new DirectBitmap(_width, _height);
 
             IsRunning = false;
             Amount = "100";
+            SelectedSortingAlgorithm = SortingAlgorithms.Bubble;
 
             MakeUnits();
             Render();
@@ -101,10 +102,94 @@ namespace SortingAlgorithmsDemo
         public ICommand AllUniqueCommand { get; }
         public ICommand FewUniqueCommand { get; }
         public ICommand PartiallyOrderedCommand { get; }
-        public ICommand ShowSortingAlgorithmInfoCommand { get; }
-        public SortingAlgorithms SelectedSortingAlgorithm { get; set; }
         public int CurrentAmount { get; private set; }
         public ObservableCollection<SortingAlgorithms> SortingAlgorithmsList { get; }
+
+        public SortingAlgorithms SelectedSortingAlgorithm
+        {
+            get => _sortingAlgorithm;
+            set
+            {
+                SetProperty(ref _sortingAlgorithm, value);
+
+                Debug.WriteLine("SelectedSortingAlgorithm: " + SelectedSortingAlgorithm);
+
+                switch (SelectedSortingAlgorithm)
+                {
+                    case SortingAlgorithms.Bubble:
+                        Message = Properties.Resources.BubbleSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Insertion:
+                        Message = Properties.Resources.InsertionSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Merge:
+                        Message = Properties.Resources.MergeSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Selection:
+                        Message = Properties.Resources.SelectionSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Shaker:
+                        Message = Properties.Resources.ShakerSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Shell:
+                        Message = Properties.Resources.ShellSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Quick:
+                        Message = Properties.Resources.QuickSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Stooge:
+                        Message = Properties.Resources.StoogeSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Pancake:
+                        Message = Properties.Resources.PancakeSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Gnome:
+                        Message = Properties.Resources.GnomeSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Counting:
+                        Message = Properties.Resources.CountingSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Radix:
+                        Message = Properties.Resources.RadixSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Comb:
+                        Message = Properties.Resources.CombSortInfo;
+                        break;
+
+                    case SortingAlgorithms.OddEven:
+                        Message = Properties.Resources.OddEvenSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Tree:
+                        Message = Properties.Resources.TreeSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Heap:
+                        Message = Properties.Resources.HeapSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Cycle:
+                        Message = Properties.Resources.CycleSortInfo;
+                        break;
+
+                    case SortingAlgorithms.Bitonic:
+                        Message = Properties.Resources.BitonicSortInfo;
+                        break;
+                }
+            }
+        }
 
         public ColorSchemes SelectedColorScheme
         {
@@ -157,12 +242,6 @@ namespace SortingAlgorithmsDemo
                     OnPropertyChanged(nameof(CurrentAmount));
                 }
             }
-        }
-
-        public bool HasMessage
-        {
-            get => _hasMessage;
-            private set => SetProperty(ref _hasMessage, value);
         }
 
         public string Message
@@ -322,6 +401,10 @@ namespace SortingAlgorithmsDemo
 
                 case SortingAlgorithms.Cycle:
                     _unitsCopy.CycleSort(PlacementFunction);
+                    break;
+
+                case SortingAlgorithms.Bitonic:
+                    _unitsCopy.BitonicSort(SwapFunction);
                     break;
             }
 
@@ -513,22 +596,6 @@ namespace SortingAlgorithmsDemo
             }
 
             Render();
-        }
-
-        private void ShowInfo()
-        {
-            HasMessage = true;
-
-            switch (SelectedSortingAlgorithm)
-            {
-                case SortingAlgorithms.Bubble:
-                    Message = Properties.Resources.BubbleSortInfo;
-                    break;
-                case SortingAlgorithms.Insertion:
-                    break;
-                case SortingAlgorithms.Merge:
-                    break;
-            }
         }
 
         private void UpdateCanvas()
