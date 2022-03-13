@@ -16,16 +16,17 @@ namespace SortingAlgorithmsDemo
 {
     public class MainWindowViewModel : ObservableObject
     {
+        private const int _width = 800;
+        private const int _height = 600;
+        private const int _minAmount = 10;
+        private const int _maxAmount = _width;
         private bool _isRunning;
         private int _amount;
         private double _xStep;
         private double _valueStep;
         private double _gradualGrayColorStep;
-        private const int _minAmount = 10;
         private BitmapImage _canvas;
         private DirectBitmap _bitmap;
-        private const int _width = 800;
-        private const int _height = 600;
         private readonly DispatcherTimer _timer;
         private readonly List<SortingUnit> _units;
         private readonly List<SortingUnit> _unitsCopy;
@@ -34,13 +35,15 @@ namespace SortingAlgorithmsDemo
         private readonly List<SortingPlacement> _placements;
         private int _currentPlacement;
         private ColorSchemes _colorScheme;
-        private Color _solidColor;
+        private readonly Color _solidColor;
+        private readonly Color _sortedSolidColor;
         private SortingAlgorithms _sortingAlgorithm;
         private string _message;
 
         public MainWindowViewModel()
         {
             _solidColor = Color.DarkBlue;
+            _sortedSolidColor = Color.DarkGreen;
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 0);
@@ -229,9 +232,10 @@ namespace SortingAlgorithmsDemo
             get => _amount.ToString();
             set
             {
-                if (int.TryParse(value, out int amount) &&
-                    amount >= _minAmount)
+                if (int.TryParse(value, out int amount))
                 {
+                    amount = amount < _minAmount ? _minAmount : amount > _maxAmount ? _maxAmount : amount;
+
                     SetProperty(ref _amount, amount);
 
                     _xStep = _width / Convert.ToDouble(_amount);
@@ -266,7 +270,7 @@ namespace SortingAlgorithmsDemo
                 var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * i);
                 var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
 
-                _units.Add(new SortingUnit(value, color, grayGradientColor));
+                _units.Add(new SortingUnit(value, color, grayGradientColor, i));
             }
         }
 
@@ -284,6 +288,8 @@ namespace SortingAlgorithmsDemo
             var type = 0;
 
             _units.Clear();
+            var currentPosition = 0;
+            var smallIncrement = 0.001;
 
             for (int i = 0; i < _amount; i++)
             {
@@ -297,7 +303,9 @@ namespace SortingAlgorithmsDemo
                         var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * _units.Count);
                         var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
 
-                        _units.Add(new SortingUnit(value, color, grayGradientColor));
+                        _units.Add(new SortingUnit(value + smallIncrement, color, grayGradientColor, currentPosition));
+                        currentPosition += 1;
+                        smallIncrement += 0.001;
                     }
 
                     break;
@@ -311,7 +319,9 @@ namespace SortingAlgorithmsDemo
                     var grayShadeComponent = Convert.ToInt32(_gradualGrayColorStep * _units.Count);
                     var grayGradientColor = Color.FromArgb(grayShadeComponent, grayShadeComponent, grayShadeComponent);
     
-                    _units.Add(new SortingUnit(value, color, grayGradientColor));
+                    _units.Add(new SortingUnit(value + smallIncrement, color, grayGradientColor, currentPosition));
+                    currentPosition += 1;
+                    smallIncrement += 0.001;
                 }
 
                 type += 1;
@@ -460,6 +470,7 @@ namespace SortingAlgorithmsDemo
             _units[position] = value;
 
             var unit = _units[position];
+            var unitValue = (int)unit.Value;
             var x = Convert.ToInt32(_xStep * position);
 
             _bitmap.FillRectangle(x, 0, (int)_xStep, _height, Color.White);
@@ -467,15 +478,15 @@ namespace SortingAlgorithmsDemo
             switch (SelectedColorScheme)
             {
                 case ColorSchemes.Solid:
-                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, _solidColor);
+                    _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, unit.InitialPosition == position ? _sortedSolidColor : _solidColor);
                     break;
 
                 case ColorSchemes.Random:
-                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.Color);
+                    _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, unit.Color);
                     break;
 
                 case ColorSchemes.GraduatedGray:
-                    _bitmap.FillRectangle(x, _height - unit.Value, (int)_xStep, unit.Value, unit.GraduatedGrayColor);
+                    _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, unit.GraduatedGrayColor);
                     break;
             }
 
@@ -498,6 +509,8 @@ namespace SortingAlgorithmsDemo
 
             var unit1 = _units[position1];
             var unit2 = _units[position2];
+            var unit1Value = (int)_units[position1].Value;
+            var unit2Value = (int)_units[position2].Value;
 
             var x1 = Convert.ToInt32(_xStep * position1);
             var x2 = Convert.ToInt32(_xStep * position2);
@@ -508,18 +521,18 @@ namespace SortingAlgorithmsDemo
             switch (SelectedColorScheme)
             {
                 case ColorSchemes.Solid:
-                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, _solidColor);
-                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, _solidColor);
+                    _bitmap.FillRectangle(x1, _height - unit1Value, (int)_xStep, unit1Value, unit1.InitialPosition == position1 ? _sortedSolidColor : _solidColor);
+                    _bitmap.FillRectangle(x2, _height - unit2Value, (int)_xStep, unit2Value, unit2.InitialPosition == position2 ? _sortedSolidColor : _solidColor);
                     break;
 
                 case ColorSchemes.Random:
-                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.Color);
-                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.Color);
+                    _bitmap.FillRectangle(x1, _height - unit1Value, (int)_xStep, unit1Value, unit1.Color);
+                    _bitmap.FillRectangle(x2, _height - unit2Value, (int)_xStep, unit2Value, unit2.Color);
                     break;
 
                 case ColorSchemes.GraduatedGray:
-                    _bitmap.FillRectangle(x2, _height - unit2.Value, (int)_xStep, unit2.Value, unit2.GraduatedGrayColor);
-                    _bitmap.FillRectangle(x1, _height - unit1.Value, (int)_xStep, unit1.Value, unit1.GraduatedGrayColor);
+                    _bitmap.FillRectangle(x1, _height - unit1Value, (int)_xStep, unit1Value, unit1.GraduatedGrayColor);
+                    _bitmap.FillRectangle(x2, _height - unit2Value, (int)_xStep, unit2Value, unit2.GraduatedGrayColor);
                     break;
             }
 
@@ -619,19 +632,20 @@ namespace SortingAlgorithmsDemo
             for (int i = 0; i < _units.Count; i++)
             {
                 var x = Convert.ToInt32(_xStep * i);
+                var unitValue = (int)_units[i].Value;
 
                 switch (SelectedColorScheme)
                 {
                     case ColorSchemes.Solid:
-                        _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _solidColor);
+                        _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, _units[i].InitialPosition == i ? _sortedSolidColor : _solidColor);
                         break;
 
                     case ColorSchemes.Random:
-                        _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _units[i].Color);
+                        _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, _units[i].Color);
                         break;
 
                     case ColorSchemes.GraduatedGray:
-                        _bitmap.FillRectangle(x, _height - _units[i].Value, (int)_xStep, _units[i].Value, _units[i].GraduatedGrayColor);
+                        _bitmap.FillRectangle(x, _height - unitValue, (int)_xStep, unitValue, _units[i].GraduatedGrayColor);
                         break;
                 }
             }

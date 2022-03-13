@@ -7,15 +7,15 @@ namespace SortingAlgorithmsDemo.Algorithms
     {
         public static void CountingSort(this List<SortingUnit> collection, Action<int, SortingUnit> placementFunction)
         {
-            int max = collection.MaxValue();
-            int min = collection.MinValue();
+            int max = (int)collection.MaxValue();
+            int min = (int)collection.MinValue();
             int range = max - min + 1;
             int[] count = new int[range];
             SortingUnit[] output = new SortingUnit[collection.Count];
 
             for (int i = 0; i < collection.Count; i++)
             {
-                count[collection[i].Value - min]++;
+                count[(int)collection[i].Value - min]++;
             }
 
             for (int i = 1; i < count.Length; i++)
@@ -25,8 +25,8 @@ namespace SortingAlgorithmsDemo.Algorithms
 
             for (int i = collection.Count - 1; i >= 0; i--)
             {
-                output[count[collection[i].Value - min] - 1] = collection[i];
-                count[collection[i].Value - min]--;
+                output[count[(int)collection[i].Value - min] - 1] = collection[i];
+                count[(int)collection[i].Value - min]--;
             }
 
             for (int i = 0; i < collection.Count; i++)

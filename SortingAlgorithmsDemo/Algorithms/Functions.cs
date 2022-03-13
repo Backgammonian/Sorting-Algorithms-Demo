@@ -62,9 +62,9 @@ namespace SortingAlgorithmsDemo.Algorithms
             return result;
         }
 
-        public static int MaxValue(this List<SortingUnit> collection)
+        public static double MaxValue(this List<SortingUnit> collection)
         {
-            int result = collection[0].Value;
+            double result = collection[0].Value;
             for (int i = 1; i < collection.Count; i++)
             {
                 if (result < collection[i].Value)
@@ -76,9 +76,9 @@ namespace SortingAlgorithmsDemo.Algorithms
             return result;
         }
 
-        public static int MinValue(this List<SortingUnit> collection)
+        public static double MinValue(this List<SortingUnit> collection)
         {
-            int result = collection[0].Value;
+            double result = collection[0].Value;
             for (int i = 1; i < collection.Count; i++)
             {
                 if (result > collection[i].Value)

@@ -7,7 +7,7 @@ namespace SortingAlgorithmsDemo.Algorithms
     {
         public static void RadixSort(this List<SortingUnit> collection, Action<int, SortingUnit> placementFunction)
         {
-            int m = collection.MaxValue();
+            int m = (int)collection.MaxValue();
 
             for (int exp = 1; m / exp > 0; exp *= 10)
             {
@@ -28,7 +28,7 @@ namespace SortingAlgorithmsDemo.Algorithms
 
             for (i = 0; i < collection.Count; i++)
             {
-                count[collection[i].Value / exp % 10]++;
+                count[(int)collection[i].Value / exp % 10]++;
             }
 
             for (i = 1; i < count.Length; i++)
@@ -38,8 +38,8 @@ namespace SortingAlgorithmsDemo.Algorithms
 
             for (i = collection.Count - 1; i >= 0; i--)
             {
-                output[count[collection[i].Value / exp % 10] - 1] = collection[i];
-                count[collection[i].Value / exp % 10]--;
+                output[count[(int)collection[i].Value / exp % 10] - 1] = collection[i];
+                count[(int)collection[i].Value / exp % 10]--;
             }
 
             for (i = 0; i < collection.Count; i++)
