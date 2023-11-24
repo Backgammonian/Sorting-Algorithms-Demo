@@ -1,6 +1,6 @@
 # Sorting-Algorithms-Demo
-WPF app for demonstrating various sorting algorithms
-## Available sorting algorithms
+WPF app for demonstrating various sorting algorithms.
+## Available sorting algorithms:
 * Bubble sort
 * Insertion sort
 * Merge sort
@@ -19,8 +19,8 @@ WPF app for demonstrating various sorting algorithms
 * Heap sort
 * Cycle sort
 * Bitonic sort
-## Demonstration
+## Demonstration:
 ![demo](demo.gif)
-## Libraries used in this project
+## Libraries used in this project:
 * [System.Drawing.Common](https://www.nuget.org/packages/System.Drawing.Common/)
 * [Microsoft.Tookit.Mvvm](https://github.com/CommunityToolkit/WindowsCommunityToolkit)
